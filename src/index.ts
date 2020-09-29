@@ -13,10 +13,19 @@ export class Main {
     constructor() {
         const self = this;
         server.on("connection", function(socket: Socket) {
-            console.log("user connected");
             var token: string;
             socket.on("register", (message) => {
                 token = message;
+
+                //Code 10: joined room //Code 11: created Room
+                var resp = {"event": "register", "roomCode": token, "state": "joined room", "code": 10};
+
+                if(token === "newRoom") {
+                    token = self.createRoomCode();
+                    resp.roomCode = token;
+                    resp.state = "created Room";
+                    resp.code = 11;
+                }
 
                 let room = self.rooms.get(token);
                 if(room === undefined) {
@@ -30,7 +39,7 @@ export class Main {
 
                 room.addClient(client);
 
-                socket.emit("info", "Register successfull");
+                socket.emit("register", resp);
             })
             socket.emit("info", "welcome");
         });
@@ -49,6 +58,14 @@ export class Main {
         if(room != undefined) {
             room.broadcast(channel, message);
         }
+    }
+
+    createRoomCode(): string {
+        const rand = Math.random().toString(36).slice(2);
+        if(this.rooms.has(rand)) {
+            return this.createRoomCode();
+        }
+        return rand;
     }
 
 }
