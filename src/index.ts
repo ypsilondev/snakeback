@@ -14,25 +14,36 @@ export class Main {
         const self = this;
         server.on("connection", function(socket: Socket) {
             var token: string;
-            socket.on("register", (message) => {
+            socket.on("join", ( message) => {
                 token = message;
-
-                //Code 10: joined room //Code 11: created Room
-                var resp = {"event": "register", "roomCode": token, "state": "joined room", "code": 10};
-
-                if(token === "newRoom") {
-                    token = self.createRoomCode();
-                    resp.roomCode = token;
-                    resp.state = "created Room";
-                    resp.code = 11;
-                }
-
+                var resp = {"event": "register", "roomCode": token, "state": "joined room", "code": 10, "id": 0, "roomSettings": {velocity: 0, players: 0}};
                 let room = self.rooms.get(token);
                 if(room === undefined) {
-                    room = new Room(token);
-                    self.rooms.set(token, room);
+                    resp.state = "room not available";
+                    socket.emit("register", resp);
+                    return;
                 }
-                    
+                
+                resp.roomSettings = room.getSettings();
+                resp.id = room.getClients().length;
+                
+                const client = new Client(socket, room, self);
+                self.clients.push(client);
+
+                room.addClient(client);
+
+                socket.emit("register", resp);
+            });
+            socket.on("register", (req: {velocity: number, players: number}) => {
+                token = self.createRoomCode();
+                //Code 10: joined room //Code 11: created Room
+                var resp = {"event": "register", "roomCode": token, "state": "joined room", "code": 11, "id": 0, "roomSettings": {velocity: 0, players: 0}};
+
+                var room = new Room(token, req.velocity, req.players);
+                self.rooms.set(token, room);
+                
+                resp.roomSettings = room.getSettings();
+                resp.id = room.getClients().length;
                 
                 const client = new Client(socket, room, self);
                 self.clients.push(client);
