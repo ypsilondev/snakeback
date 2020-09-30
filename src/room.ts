@@ -17,17 +17,18 @@ export class Room {
     addClient(client: Client) {
         this.clients.push(client);
         this.broadcast("game", {"message": "User joined", payload: this.clients.length});
+        console.log(this.players, this.clients.length, this.isFull());
         if(this.isFull()) {
-            this.startBroadcast();
+            setTimeout(() => {
+                this.broadcast("game", {message: "Game Full", "payload": {}});
+                this.broadcast("game", {message: "Coin generated", "payload": {x: Math.random()*1390, y: Math.random()*790}});
+                this.broadcast("game", {message: "start Countdown", "payload": {}});
+            }, 400);
         }
     }
 
     async startBroadcast() {
-        setTimeout(() => {
-            this.broadcast("game", {message: "Game Full", "payload": {}});
-            this.broadcast("game", {message: "Coin generated", "payload": {x: Math.random()*1390, y: Math.random()*790}});
-            this.broadcast("game", {message: "start Countdown", "payload": {}});
-        }, 400);
+        
     }
 
     getClients() : Array<Client> {
