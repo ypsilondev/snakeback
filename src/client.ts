@@ -28,6 +28,8 @@ export class Client {
         this.socket.on("game", ( req: {message: string, payload: {}} ) => {
             switch (req.message) {
                 case "coin collected": this.room.broadcast("game", Util.createNewCoin()); break;
+
+                default: this.room.broadcast("game", req);
             }
         })
     }
