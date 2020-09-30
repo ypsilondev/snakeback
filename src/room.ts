@@ -23,12 +23,8 @@ export class Room {
                 this.broadcast("game", {message: "Game Full", "payload": {}});
                 this.broadcast("game", {message: "Coin generated", "payload": {x: Math.random()*1390, y: Math.random()*790}});
                 this.broadcast("game", {message: "start Countdown", "payload": {}});
-            }, 400);
+            }, 2000);
         }
-    }
-
-    async startBroadcast() {
-        
     }
 
     getClients() : Array<Client> {
