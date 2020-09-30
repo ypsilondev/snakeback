@@ -16,6 +16,20 @@ export class Room {
 
     addClient(client: Client) {
         this.clients.push(client);
+        // @ts-ignore
+        this.broadcast("game", {"message": "User joined", payload: this.clients.length});
+        if(this.isFull()) {
+            // @ts-ignore
+            this.broadcast("game", {message: "Game Full", "payload": {}});
+            // @ts-ignore
+            this.broadcast("game", {message: "Coin generated", "payload": {x: Math.random()*3990, y: Math.random()*790}})
+            async () => {
+                for(let i = 10; i > 0; i--) {
+                    // @ts-ignore
+                    this.broadcast("game", {message: "countdown", payload: i});
+                }
+            }
+        }
     }
 
     getClients() : Array<Client> {
@@ -28,6 +42,10 @@ export class Room {
 
     getMaxPlayers(): number {
         return this.players;
+    }
+
+    isFull(): boolean {
+        return this.clients.length >= this.players;
     }
 
     getSettings(): {velocity: number, players: number} {

@@ -20,6 +20,7 @@ export class Main {
                 let room = self.rooms.get(token);
                 if(room === undefined) {
                     resp.state = "room not available";
+                    resp.code = 19;
                     socket.emit("register", resp);
                     return;
                 }
