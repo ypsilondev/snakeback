@@ -23,6 +23,7 @@ export class Client {
     private registerChannels() {
         this.socket.on("global", ( message ) => this.main.broadcast(message));
         this.socket.on("broadcast", ( message) => this.room.broadcast("broadcast", message));
+        this.socket.on("movement", ( message) => this.room.broadcast("movement", message));
     }
 
 }
