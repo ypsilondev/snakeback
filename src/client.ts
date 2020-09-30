@@ -16,7 +16,7 @@ export class Client {
         this.registerChannels();
     }
 
-    send(channel: string, message: JSON) {
+    send(channel: string, message: {}) {
         this.socket.emit(channel, message);
     }
 

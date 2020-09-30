@@ -16,20 +16,18 @@ export class Room {
 
     addClient(client: Client) {
         this.clients.push(client);
-        // @ts-ignore
         this.broadcast("game", {"message": "User joined", payload: this.clients.length});
         if(this.isFull()) {
-            // @ts-ignore
-            this.broadcast("game", {message: "Game Full", "payload": {}});
-            // @ts-ignore
-            this.broadcast("game", {message: "Coin generated", "payload": {x: Math.random()*3990, y: Math.random()*790}})
-            async () => {
-                for(let i = 10; i > 0; i--) {
-                    // @ts-ignore
-                    this.broadcast("game", {message: "countdown", payload: i});
-                }
-            }
+            this.startBroadcast();
         }
+    }
+
+    async startBroadcast() {
+        setTimeout(() => {
+            this.broadcast("game", {message: "Game Full", "payload": {}});
+            this.broadcast("game", {message: "Coin generated", "payload": {x: Math.random()*1390, y: Math.random()*790}});
+            this.broadcast("game", {message: "start Countdown", "payload": {}});
+        }, 400);
     }
 
     getClients() : Array<Client> {
@@ -52,7 +50,7 @@ export class Room {
         return {velocity: this.velocity, players: this.players};
     }
 
-    broadcast(channel: string, message: JSON) {
+    broadcast(channel: string, message: {}) {
         this.clients.forEach(( client ) => {
             client.send(channel, message);
         })

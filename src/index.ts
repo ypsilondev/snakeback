@@ -24,6 +24,12 @@ export class Main {
                     socket.emit("register", resp);
                     return;
                 }
+                if(room.isFull()) {
+                    resp.state = "room is full";
+                    resp.code = 18;
+                    socket.emit("register", resp);
+                    return;
+                }
                 
                 resp.roomSettings = room.getSettings();
                 resp.id = room.getClients().length;
