@@ -34,7 +34,7 @@ export class Main {
                 resp.roomSettings = room.getSettings();
                 resp.id = room.getClients().length;
                 
-                const client = new Client(socket, room, self);
+                const client = new Client(socket, room, self, resp.id);
                 self.clients.push(client);
 
                 room.addClient(client);
@@ -52,7 +52,7 @@ export class Main {
                 resp.roomSettings = room.getSettings();
                 resp.id = room.getClients().length;
                 
-                const client = new Client(socket, room, self);
+                const client = new Client(socket, room, self, resp.id);
                 self.clients.push(client);
 
                 room.addClient(client);

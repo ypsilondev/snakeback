@@ -8,17 +8,23 @@ export class Client {
     private socket: Socket;
     private room: Room;
     private main: Main;
+    private id: number;
 
-    constructor(socket: Socket, room: Room, main: Main) {
+    constructor(socket: Socket, room: Room, main: Main, id: number) {
         this.socket = socket;
         this.room = room;
         this.main = main;
+        this.id = id;
 
         this.registerChannels();
     }
 
     send(channel: string, message: {}) {
         this.socket.emit(channel, message);
+    }
+
+    getID(): number {
+        return this.id;
     }
 
     private registerChannels() {
