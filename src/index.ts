@@ -79,7 +79,7 @@ export class Main {
     }
 
     createRoomCode(): string {
-        const rand = Math.random().toString(36).slice(2);
+        const rand = Math.random().toString(36).slice(2, 6);
         if(this.rooms.has(rand)) {
             return this.createRoomCode();
         }

@@ -9,6 +9,8 @@ export class Room {
     private velocity: number;
     private players: number;
 
+    private usedColors = new Array<String>();
+
     constructor(token: string, velocity: number, players: number) {
         this.token = token;
         this.velocity = velocity;
@@ -18,13 +20,13 @@ export class Room {
     addClient(client: Client) {
         this.clients.push(client);
         this.broadcast("game", {"message": "User joined", payload: this.clients.length});
-        if(this.isFull()) {
-            setTimeout(() => {
-                this.broadcast("game", {message: "Game Full", "payload": {}});
-                this.broadcast("game", Util.createNewCoin());
-                this.broadcast("game", {message: "start Countdown", "payload": {}});
-            }, 2000);
-        }
+        //if(this.isFull()) {
+        //    setTimeout(() => {
+        //        this.broadcast("game", {message: "Game Full", "payload": {}});
+        //        this.broadcast("game", Util.createNewCoin());
+        //        this.broadcast("game", {message: "start Countdown", "payload": {}});
+        //    }, 2000);
+        //}
     }
 
     getClients() : Array<Client> {
@@ -37,6 +39,24 @@ export class Room {
 
     getMaxPlayers(): number {
         return this.players;
+    }
+
+    setColor(client: Client, color: string): boolean {
+        if(this.usedColors.includes(color))
+            return false;
+        client.setColor(color);
+        this.usedColors.push(color);
+
+        if(this.usedColors.length == this.players) {
+            this.broadcast("game", {message: "Game Full", "payload": {}});
+            this.broadcast("game", Util.createNewCoin());
+            this.broadcast("game", {message: "start Countdown", "payload": {}});
+        }
+        return true;
+    }
+
+    checkStart(): void {
+
     }
 
     isFull(): boolean {
