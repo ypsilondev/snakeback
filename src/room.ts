@@ -47,10 +47,12 @@ export class Room {
         client.setColor(color);
         this.usedColors.push(color);
 
-        if(this.usedColors.length == this.players) {
-            this.broadcast("game", {message: "Game Full", "payload": {}});
-            this.broadcast("game", Util.createNewCoin());
-            this.broadcast("game", {message: "start Countdown", "payload": {}});
+        if(this.usedColors.length === this.players) {
+            setTimeout(() => {
+                this.broadcast("game", {message: "Game Full", "payload": {}});
+                this.broadcast("game", Util.createNewCoin());
+                this.broadcast("game", {message: "start Countdown", "payload": {}});
+            }, 1000);
         }
         return true;
     }
