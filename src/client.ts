@@ -49,6 +49,7 @@ export class Client {
                     if(whoIsIn.length <= 1) {
                         this.room.broadcast("game", {message: "winner", payload: {id: whoIsIn[0].id}});
                     }
+                    this.room.broadcast("game", {message: "dead", payload: {id: this.id}});
                     break;
                 }
                 default: this.room.broadcast("game", req);
