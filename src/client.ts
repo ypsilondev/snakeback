@@ -46,7 +46,7 @@ export class Client {
                 case "Im dead": {
                     this.dead = true;
                     let whoIsIn = this.room.whoIsIn();
-                    if(whoIsIn.length <= 0) {
+                    if(whoIsIn.length <= 1) {
                         this.room.broadcast("game", {message: "winner", payload: {id: whoIsIn[0].id}});
                     }
                     break;
