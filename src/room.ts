@@ -49,7 +49,6 @@ export class Room {
 
     broadcast(channel: string, message: {}) {
         this.clients.forEach(( client ) => {
-            //console.log(client.getID(), channel, message);
             client.send(channel, message);
         })
     }
