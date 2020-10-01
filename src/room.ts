@@ -53,4 +53,10 @@ export class Room {
         })
     }
 
+    whoIsIn(): Array<Client> {
+        return this.clients.filter((element: Client) => {
+            return !element.isDead();
+        });
+    }
+
 }
